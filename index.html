@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <!-- <link rel="stylesheet" href="./css/minireset.css"> -->
+    <link rel="stylesheet" href="./css/icon.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Markdown NoteBook</title>
+</head>
+
+<body>
+    <!-- Vue Js lib -->
+    <script src="./js/vue.js"></script>
+    <!-- Marked lib -->
+    <script src="./js/marked.min.js"></script>
+    <!-- momentjs -->
+    <script src="./js/moment.min.js"></script>
+
+    <!-- 应用 -->
+    <div id="notebook">
+        <!-- 笔记列表 -->
+        <aside class="side-bar border border-primary">
+            <!-- button title属性使用了计算属性 -->
+            <div class="toolbar">
+                <button type="button" class="btn btn-success" @click="addNote" v-bind:title="addBtnTitle"><i class="material-icons">add</i>Add
+                    Note</button>
+            </div>
+
+            <div class="list-group list-group-flush">
+                <!-- 已有笔记列表   -->
+                <div class="list-group-item btn" v-for="note in sortedNotes" @click="selectNote(note)" v-bind:class="{active: note.id == selectedId}">{{note.title}}
+                    <i class="icon material-icons" v-if="note.favorite">star</i></div>
+            </div>
+        </aside>
+
+
+        <!-- 主面板 -->
+        <section class="main border border-primary" v-if="selectedNote">
+            <div class="toolbar">
+                <!-- 编辑删除工具 -->
+                <input type="text" v-model="selectedNote.title" placeholder="Note title" class="form-control form-control-lg">
+                <button @click="favoriteNote" class="material-icons">{{ selectedNote.favorite ? 'start' :
+                    'star_border'}}</button>
+                <button @click="removeNote" title="Remove Note"> <i class="material-icons">delete</i></button>
+            </div>
+            <textarea name="editor" v-model="selectedNote.content"></textarea>
+
+            <div class="toolbar status-bar">
+                <!-- 底部状态栏 -->
+                <span class="date">
+                    <span class="lable">Created: </span>
+                    <!-- 使用vue过滤器展示日期 -->
+                    <span class="vlaue">{{ selectedNote.created | date }}</span>
+
+                    <!-- 统计 -->
+                    <span class="lines">
+                        <span>行数:</span>
+                        <span>{{linesCount}}</span>
+                    </span>
+                    <span class="words">
+                        <span>词数:</span>
+                        <span>{{wordsCount}}</span>
+                    </span>
+                    <span class="字符数">
+                        <span>行数:</span>
+                        <span>{{charactersCount}}</span>
+                    </span>
+                </span>
+            </div>
+        </section>
+
+        <!-- 预览面板 -->
+        <aside class="preview border border-primary" v-html="notePreview" v-if="selectedNote">
+        </aside>
+
+    </div>
+
+
+
+    <!-- 自定义js -->
+    <script src="./js/sctipt.js"></script>
+</body>
+
+</html>
